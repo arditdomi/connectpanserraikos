@@ -1,0 +1,49 @@
+<div class="app-container" [class.app-is-mobile]="mobileQuery.matches">
+  <mat-toolbar color="primary" class="app-toolbar">
+    <button mat-icon-button (click)="snav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <h1 class="app-name">Connect Panserraikos</h1>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="app-sidenav-container"
+                         [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                 [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+      <mat-nav-list>
+
+        <mat-list-item [routerLink]="'/login'" routerLinkActive="active">
+          <button mat-icon-button>
+            <mat-icon>vpn_key</mat-icon>
+          </button>
+          Login
+        </mat-list-item>
+
+        <mat-list-item [routerLink]="'/profile'" routerLinkActive="active">
+          <button mat-icon-button>
+            <mat-icon>account_circle</mat-icon>
+          </button>
+          Profile
+        </mat-list-item>
+
+        <mat-list-item [routerLink]="'/message'" routerLinkActive="active">
+          <button mat-icon-button>
+            <mat-icon>message</mat-icon>
+          </button>
+          Compose New Message
+        </mat-list-item>
+
+        <mat-list-item [routerLink]="'/logout'" routerLinkActive="active">
+          <button mat-icon-button>
+            <mat-icon>exit_to_app</mat-icon>
+          </button>
+          Logout
+        </mat-list-item>
+
+      </mat-nav-list>
+    </mat-sidenav>
+    <router-outlet></router-outlet>
+  </mat-sidenav-container>
+</div>
+
+

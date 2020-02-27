@@ -1,0 +1,24 @@
+<mat-card class="profile-card">
+  <mat-card-header>
+    <div mat-card-avatar class="profile-header-image"></div>
+    <mat-card-title>Mo mo mo mooooontr</mat-card-title>
+    <mat-card-subtitle>Pussy fucker</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image [src]="image1" alt="Photo of Head coach">
+  <mat-card-content>
+    <p>
+    {{profileDescription}}
+    </p>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <div>
+    <button mat-button (click)="onProfilePictureChange()">
+      <mat-icon>camera_alt</mat-icon>CHANGE
+    </button>
+    <button mat-button>
+      <mat-icon>share</mat-icon>SHARE
+    </button>
+    </div>
+  </mat-card-actions>
+</mat-card>
