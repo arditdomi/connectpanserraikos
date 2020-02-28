@@ -25,6 +25,6 @@ export class LoginComponent {
   }
 
   onLogin() {
-    console.log('Login actions');
+    console.log('Perform login');
   }
 }
