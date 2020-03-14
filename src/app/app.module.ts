@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, DoBootstrap, ApplicationRef, APP_INITIALIZER } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -42,11 +42,14 @@ import { CdkTreeModule } from '@angular/cdk/tree';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PortalModule } from '@angular/cdk/portal';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { LoginComponent } from './auth/login/login.component';
 import { SidenavComponent } from './nagivation/sidenav.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProfileComponent } from './app/profile.component';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { initializer } from './app-init';
 import { HttpClientModule } from '@angular/common/http';
+
+const keycloakService = new KeycloakService();
 
 @NgModule({
   imports: [
@@ -99,15 +102,24 @@ import { HttpClientModule } from '@angular/common/http';
     MatListModule,
     FormsModule,
     MatFormFieldModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserModule,
+    HttpClientModule,
+    // ClarityModule,
+    KeycloakAngularModule,
   ],
   declarations: [
     AppComponent,
-    LoginComponent,
     SidenavComponent,
     ProfileComponent
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializer,
+      multi: true,
+      deps: [KeycloakService]
+    }],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

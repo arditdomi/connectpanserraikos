@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile',
@@ -6,23 +7,25 @@ import { Component } from '@angular/core';
   styleUrls: [ 'profile.component.scss']
 })
 
-export class ProfileComponent {
+export class ProfileComponent implements OnInit{
 
-  private image1 = `../../assets/montzi.jpg`;
+  private image1 = `../../assets/london.jpg`;
 
-  constructor() {}
-  profileDescription = 'Head coach of football team Panserraikos';
+  constructor(private http: HttpClient) {}
+  profileDescription: string;
 
-  onProfilePictureChange() {
-
+  ngOnInit(): void {
+    this.http.get('http://localhost:8081/messages/history/v1').toPromise().then((message: Message) => {
+      this.profileDescription = message.messageText;
+    });
   }
 
-  // async fetchProfilePicture() {
-  //   const url = 'https://drive.google.com/open?id=1Enz_mugFp6b2cq4vQnV-hJN7-0JwXdKY';
-  //   await this.http.get(url).toPromise().then(image => {
-  //     return image;
-  //   }, (error => {
-  //     throwError(error);
-  //   }))
-  // }
+  onProfilePictureChange() {
+  }
+}
+
+export class Message {
+  id: string;
+  day: string;
+  messageText: string;
 }

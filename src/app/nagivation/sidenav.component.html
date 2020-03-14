@@ -33,7 +33,7 @@
           Compose New Message
         </mat-list-item>
 
-        <mat-list-item [routerLink]="'/logout'" routerLinkActive="active">
+        <mat-list-item (click)="logout()" [routerLink]="'/logout'" routerLinkActive="active">
           <button mat-icon-button>
             <mat-icon>exit_to_app</mat-icon>
           </button>
