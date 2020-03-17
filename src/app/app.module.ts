@@ -45,8 +45,66 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { LoginComponent } from './auth/login/login.component';
 import { SidenavComponent } from './nagivation/sidenav.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ProfileComponent } from './app/profile.component';
-import { HttpClientModule } from '@angular/common/http';
+import { ProfileComponent } from './app/components/profile/profile.component';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
+import { ResetPasswordComponent } from './auth/login/reset-password.component';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database-deprecated';
+import { environment } from '../environments/environment';
+import * as firebase from 'firebase';
+import { AuthGuard } from './auth/guards/auth.guard';
+import { PostComponent } from './app/posts/post.component';
+import { TeamsComponent } from './app/components/teams/teams.component';
+import { ManageComponent } from './app/components/manage/manage.component';
+
+const MATERIAL_MODULES = [
+  MatAutocompleteModule,
+  MatBadgeModule,
+  MatBottomSheetModule,
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatStepperModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatDividerModule,
+  MatExpansionModule,
+  MatGridListModule,
+  MatInputModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatTableModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule,
+  MatTreeModule,
+  PortalModule,
+  ScrollingModule,
+  MatIconModule,
+  MatSidenavModule,
+  MatToolbarModule,
+  MatListModule,
+  FormsModule,
+  MatFormFieldModule,
+  ReactiveFormsModule
+];
+
+firebase.initializeApp(environment.firebaseConfig);
 
 @NgModule({
   imports: [
@@ -55,59 +113,31 @@ import { HttpClientModule } from '@angular/common/http';
     CdkTableModule,
     CdkTreeModule,
     DragDropModule,
-    MatAutocompleteModule,
-    MatBadgeModule,
-    MatBottomSheetModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatStepperModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatDividerModule,
-    MatExpansionModule,
-    MatGridListModule,
-    MatInputModule,
-    MatMenuModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatRippleModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatTreeModule,
-    PortalModule,
-    ScrollingModule,
+    MATERIAL_MODULES,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatListModule,
-    FormsModule,
-    MatFormFieldModule,
-    ReactiveFormsModule
+    AngularFirestoreModule,
+    AngularFireDatabaseModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    NgxAuthFirebaseUIModule.forRoot(environment.firebaseConfig,
+      () => 'connect-panserraikos', environment.config)
   ],
   declarations: [
     AppComponent,
     LoginComponent,
     SidenavComponent,
-    ProfileComponent
+    ProfileComponent,
+    ResetPasswordComponent,
+    PostComponent,
+    TeamsComponent,
+    ProfileComponent,
+    ManageComponent
   ],
-  providers: [],
+  providers: [
+    AngularFireAuth,
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

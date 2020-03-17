@@ -12,12 +12,12 @@
                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
       <mat-nav-list>
 
-        <mat-list-item [routerLink]="'/login'" routerLinkActive="active">
-          <button mat-icon-button>
-            <mat-icon>vpn_key</mat-icon>
-          </button>
-          Login
-        </mat-list-item>
+<!--        <mat-list-item [routerLink]="'/login'" routerLinkActive="active">-->
+<!--          <button mat-icon-button>-->
+<!--            <mat-icon>vpn_key</mat-icon>-->
+<!--          </button>-->
+<!--          Login-->
+<!--        </mat-list-item>-->
 
         <mat-list-item [routerLink]="'/profile'" routerLinkActive="active">
           <button mat-icon-button>
@@ -28,12 +28,26 @@
 
         <mat-list-item [routerLink]="'/message'" routerLinkActive="active">
           <button mat-icon-button>
-            <mat-icon>message</mat-icon>
+            <mat-icon>note_add</mat-icon>
           </button>
-          Compose New Message
+          New Post
         </mat-list-item>
 
-        <mat-list-item [routerLink]="'/logout'" routerLinkActive="active">
+        <mat-list-item (click)="navigateToTeams()" routerLinkActive="active">
+          <button mat-icon-button>
+            <mat-icon>group_work</mat-icon>
+          </button>
+          View teams
+        </mat-list-item>
+
+        <mat-list-item (click)="navigateToManage()" routerLinkActive="active">
+          <button mat-icon-button>
+            <mat-icon>tune</mat-icon>
+          </button>
+          Manage
+        </mat-list-item>
+
+        <mat-list-item (click)="logout()" routerLinkActive="active">
           <button mat-icon-button>
             <mat-icon>exit_to_app</mat-icon>
           </button>
