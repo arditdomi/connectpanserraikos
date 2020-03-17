@@ -1,0 +1,14 @@
+<mat-card class="profile-card" *ngIf="user">
+  <mat-card-header>
+    <img mat-card-avatar [src]="user.photoURL"  class="profile-header-image">
+    <mat-card-title>{{user.displayName}}</mat-card-title>
+  </mat-card-header>
+  <img mat-card-image [src]="user.photoURL">
+
+  <mat-card-actions>
+    <label for="file">Update profile picture</label>
+    <input type="file"
+           id="file"
+           (change)="onProfilePictureChange($event)">
+  </mat-card-actions>
+</mat-card>
