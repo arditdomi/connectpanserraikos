@@ -1,7 +1,7 @@
 <ng-form class="auth-layout">
 <ngx-auth-firebaseui-login #loginComponent *ngIf="mode === 'login'"
   (onSuccess)="onSuccess($event)"
-  (onError)="onError($event)"
+  (onError)="handleError($event)"
   (onCreateAccountRequested)="onRegisterMode()"
   (onResetPasswordRequested)="onResetPassword()"
   [providers]="['google']"

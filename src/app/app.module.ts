@@ -58,6 +58,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { PostComponent } from './app/posts/post.component';
 import { TeamsComponent } from './app/components/teams/teams.component';
 import { ManageComponent } from './app/components/manage/manage.component';
+import { PlayerDialogComponent } from './app/components/manage/player-dialog/player-dialog.component';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -132,12 +133,14 @@ firebase.initializeApp(environment.firebaseConfig);
     PostComponent,
     TeamsComponent,
     ProfileComponent,
-    ManageComponent
+    ManageComponent,
+    PlayerDialogComponent
   ],
   providers: [
     AngularFireAuth,
     AuthGuard
   ],
+  entryComponents: [PlayerDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
