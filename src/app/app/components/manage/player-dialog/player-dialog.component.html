@@ -1,0 +1,45 @@
+<h1 mat-dialog-title>Add Player</h1>
+<div mat-dialog-content>
+  <p>Player details</p>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="data.name">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Surname</mat-label>
+    <input matInput [(ngModel)]="data.surname">
+  </mat-form-field>
+
+<!--  <mat-form-field>-->
+<!--    <mat-label>Age</mat-label>-->
+<!--    <input matInput [(ngModel)]="data.age">-->
+<!--  </mat-form-field>-->
+
+  <mat-form-field>
+    <mat-label>Choose date of birth</mat-label>
+    <input matInput [matDatepicker]="picker"
+           [formControl]="dateFormControl"
+           (dateChange)="onDateSelect()">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Select team</mat-label>
+    <mat-select>
+      <mat-option (click)="onTeamSelection($event)" *ngFor="let team of data.teams" [value]="team.id">
+        {{team.id}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+<!--  <mat-form-field>-->
+<!--    <mat-label>Team</mat-label>-->
+<!--    <input matInput >-->
+<!--  </mat-form-field>-->
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Add</button>
+</div>

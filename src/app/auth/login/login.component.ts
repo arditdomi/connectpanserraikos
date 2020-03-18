@@ -3,6 +3,7 @@ import { AuthService } from '../services/auth.service';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { NavigationExtras, Router } from '@angular/router';
+import { LogService } from '../../app/services/log.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent {
   mode: string = 'login';
 
   constructor(private authService: AuthService,
-              private _snackBar: MatSnackBar,
+              private logService: LogService,
               private router: Router) {
   }
 
@@ -28,9 +29,7 @@ export class LoginComponent {
       fragment: 'anchor'
     };
     this.router.navigate(['/profile'], navigationExtras);
-    this._snackBar.open('You are now logged in', '', {
-      duration: 3000
-    });
+    this.logService.showMessage('You are now logged in');
   }
 
   async onForgotPasswordSubmit($event) {
@@ -41,15 +40,11 @@ export class LoginComponent {
     }).catch(error => {
       snackBarMessage = 'An error occured';
     });
-    this._snackBar.open(snackBarMessage, '', {
-      duration: 3000
-    });
+    this.handleError(snackBarMessage);
   }
 
-  onError($event) {
-    this._snackBar.open($event, '', {
-      duration: 3000
-    });
+  handleError($event) {
+    this.logService.handleError($event);
   }
 
   onRegisterMode() {
