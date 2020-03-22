@@ -6,6 +6,7 @@ import { FormControl } from '@angular/forms';
 @Component({
   selector: 'player-dialog',
   templateUrl: 'player-dialog.component.html',
+  styleUrls: ['player-dialog.component.scss']
 })
 export class PlayerDialogComponent {
 

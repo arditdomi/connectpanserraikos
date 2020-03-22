@@ -1,11 +1,28 @@
 <h4>Teams</h4>
 
 <div class="app-search-container">
-<mat-form-field>
+
+<ng-form>
+  <mat-form-field>
+    <mat-label>Subject</mat-label>
+    <input matInput [formControl]="subjectFormControl" type="text" placeholder="Post subject">
+  </mat-form-field>
+
+  <mat-form-field class="app-search-select-team">
+    <mat-label >Message</mat-label>
+    <input matInput [formControl]="messageFormControl" placeholder="Post message">
+  </mat-form-field>
+
+  <button mat-icon-button [disabled]="isFormNotFilled()" (click)="onSubmitPost()">
+    <mat-icon>send</mat-icon>
+  </button>
+</ng-form>
+
+<mat-form-field class="app-search-select-team">
   <mat-label>Select team</mat-label>
   <mat-select [formControl]="teamFormControl">
-    <mat-option (click)="onTeamSelection($event)" *ngFor="let team of teams" [value]="team.id">
-      {{team.id}}
+    <mat-option (click)="onTeamSelection($event)" *ngFor="let team of teams" [value]="team.name">
+      {{team.name}}
     </mat-option>
   </mat-select>
 </mat-form-field>
@@ -19,7 +36,6 @@
   </mat-select>
 </mat-form-field>
 
-  <div class="app-search-buttons">
 <button mat-icon-button [disabled]="!(selectedTeamName && selectedRange)" (click)="onSearch()">
   <mat-icon>search</mat-icon>
 </button>
@@ -27,7 +43,6 @@
 <button mat-icon-button (click)="onResetSearch()">
   <mat-icon>cancel</mat-icon>
 </button>
-  </div>
 </div>
 
 <table mat-table [dataSource]="players" class="mat-elevation-z8">
@@ -50,6 +65,11 @@
   <ng-container matColumnDef="team">
     <th mat-header-cell *matHeaderCellDef> Team </th>
     <td mat-cell *matCellDef="let element"> {{element.team}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef> Email </th>
+    <td mat-cell *matCellDef="let element"> {{element.email}} </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
