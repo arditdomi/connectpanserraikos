@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Add Player</h1>
+<div mat-dialog-content>
+  <p>Player details</p>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="data.name">
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Add team</button>
+  <button mat-button [mat-dialog-close]="null" cdkFocusInitial>Cancel</button>
+</div>
