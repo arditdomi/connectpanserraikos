@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Delete Team</h1>
+<mat-error>CAUTION! Deleting a team will erase all the players that belong to the team</mat-error>
+<div mat-dialog-content>
+  <p>Team details</p>
+
+  <mat-form-field>
+    <mat-label>Select team</mat-label>
+    <mat-select>
+      <mat-option (click)="onTeamSelection($event)" *ngFor="let team of data.teams" [value]="team.name">
+        {{team.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Delete</button>
+  <button mat-button [mat-dialog-close]="null" cdkFocusInitial>Cancel</button>
+</div>
