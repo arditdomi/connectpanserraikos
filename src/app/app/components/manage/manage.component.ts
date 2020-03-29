@@ -6,20 +6,22 @@ import { TeamDialogComponent } from './team-dialog/team-dialog.component';
 import { LogService } from '../../services/log.service';
 import { DeleteTeamDialogComponent } from './delete-team-dialog/delete-team-dialog.component';
 import { DeletePlayerDialogComponent } from './delete-player-dialog/delete-player-dialog.component';
+import { Player } from '../../models/player';
 
 @Component({
   selector: 'app-manage',
   templateUrl: 'manage.component.html',
   styleUrls: ['manage.component.scss']
 })
-export class ManageComponent implements OnInit{
+export class ManageComponent implements OnInit {
 
   teams;
 
   constructor(
     public dialog: MatDialog,
     private appService: AppService,
-    private logService: LogService){}
+    private logService: LogService) {
+  }
 
   ngOnInit() {
     this.reloadTeams();
@@ -29,13 +31,13 @@ export class ManageComponent implements OnInit{
     this.reloadTeams();
     const dialogRef = this.dialog.open(PlayerDialogComponent, {
       width: '550px',
-      data: {teams: this.teams}
+      data: { teams: this.teams }
     });
 
-    dialogRef.afterClosed().subscribe(playerData => {
-      if (playerData) {
-        if (this.appService.isPlayerValid(playerData)) {
-          this.appService.createPlayer(playerData);
+    dialogRef.afterClosed().subscribe((player) => {
+      if (player) {
+        if (this.appService.isPlayerValid(player)) {
+          this.appService.createPlayer(player);
         } else {
           this.logService.handleError('Please provide all the player details');
         }
@@ -64,7 +66,7 @@ export class ManageComponent implements OnInit{
     this.reloadTeams();
     const dialogRef = this.dialog.open(DeleteTeamDialogComponent, {
       width: '450px',
-      data: {teams: this.teams}
+      data: { teams: this.teams }
     });
 
     dialogRef.afterClosed().subscribe(teamData => {
@@ -98,49 +100,19 @@ export class ManageComponent implements OnInit{
   addFakeEntities() {
     const teams = ['football', 'basketball', 'volley', 'hockey'];
     teams.forEach(team => {
-      this.appService.createTeam({name: team})
+      this.appService.createTeam({ name: team });
     });
 
     const fakeAge = 'Wed Mar 18 2020 00:00:00 GMT+0000 (Greenwich Mean Time)';
-    const players = [
-      {
-        name: 'fake1',
-        surname: 'fake1',
-        email: 'connectpanserraikos@gmail.com',
-        age: new Date(2002, 10),
-        team: teams[0],
-      },
-      {
-        name: 'fake2',
-        surname: 'fake2',
-        email: 'connectpanserraikos2@gmail.com',
-        age: new Date(2004, 10),
-        team: teams[0],
-      },
-      {
-        name: 'fake3',
-        surname: 'fake3',
-        email: 'connectpanserraikos3@gmail.com',
-        age: new Date(2005, 10),
-        team: teams[1],
-      },
-      {
-        name: 'fake4',
-        surname: 'fake4',
-        email: 'domiardit10@gmail.com',
-        age: new Date(2006, 12),
-        team: teams[2],
-      },
-      {
-        name: 'fake5',
-        surname: 'fake5',
-        email: 'domiardit96@gmail.com',
-        age: new Date(2009, 2),
-        team: teams[3],
-      }
-    ];
+    const player1: Player = new Player('fake1', 'fake1', new Date(2002, 10), teams[0], 'connectpanserraikos@gmail.com');
+    const player2: Player = new Player('fake2', 'fake2', new Date(2004, 10), teams[0], 'connectpanserraikos2@gmail.com');
+    const player3: Player = new Player('fake3', 'fake3', new Date(2005, 10), teams[1], 'connectpanserraikos3@gmail.com');
+    const player4: Player = new Player('fake4', 'fake4', new Date(2006, 12), teams[2], 'connectpanserraikos@gmail.com');
+    const player5: Player = new Player('fake5', 'fake5', new Date(2009, 10), teams[3], 'domiardit96@gmail.com');
 
-    players.forEach(player => {
+    const players: Player[] = [player1, player2, player3, player4, player5];
+
+    players.forEach((player: Player) => {
       this.appService.createPlayer(player);
     });
   }

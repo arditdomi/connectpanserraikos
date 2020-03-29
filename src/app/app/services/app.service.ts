@@ -4,6 +4,7 @@ import { LogService } from './log.service';
 import * as moment from 'moment';
 import { firestore } from 'firebase';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Player } from '../models/player';
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +36,8 @@ export class AppService {
     return teams;
   }
 
-  async getPlayers() {
-    let players = [];
+  async getPlayers(): Promise<Player[]> {
+    let players: Player[] = [];
     await this.playersReference.get()
       .then(response => {
         players = this.filterUsersFromResponse(response);
@@ -47,8 +48,8 @@ export class AppService {
     return players;
   }
 
-  async getPlayersInTeam(teamName: string) {
-    let players = [];
+  async getPlayersInTeam(teamName: string): Promise<Player[]> {
+    let players: Player[] = [];
     await this.playersReference.where('team', '==', teamName).get()
       .then(response => {
         players = this.filterUsersFromResponse(response);
@@ -65,7 +66,8 @@ export class AppService {
       surname: playerData.surname,
       age: playerData.age,
       team: playerData.team,
-      email: playerData.email
+      email: playerData.email,
+      photoURL: playerData.photoURL
     };
     this.playersReference.doc(player.email).set(player).then(() => {
       this.logService.showMessage('Player was added successfully');
@@ -105,7 +107,7 @@ export class AppService {
   }
 
   async deletePlayersInTeam(teamName: string) {
-    let players = [];
+    let players: Player[] = [];
     await this.getPlayersInTeam(teamName).then(result => {
       players = result;
     });
@@ -115,24 +117,24 @@ export class AppService {
     }
   }
 
-  isPlayerValid(playerData): boolean {
-    return (playerData.name !== undefined) && (playerData.surname !== undefined)
-      && (playerData.age !== undefined) && (playerData.team !== undefined)
-      && (playerData.email !== undefined);
-  }
-
   isTeamValid(teamData): boolean {
     return (teamData !== undefined);
   }
 
-  async searchStandardMode(selectedRange: number, selectedTeamName: string) {
+  isPlayerValid(player): boolean {
+    return (player.name !== undefined) && (player.surname !== undefined)
+      && (player.age !== undefined) && (player.team !== undefined)
+      && (player.email !== undefined);
+  }
+
+  async searchStandardMode(selectedRange: number, selectedTeamName: string): Promise<Player[]> {
     const ageRangeQuery = this.generateRangeQuery(selectedRange);
 
     const timestampFrom = firestore.Timestamp.fromDate(ageRangeQuery.from);
     const timestampTo = firestore.Timestamp.fromDate(ageRangeQuery.to);
 
     if (ageRangeQuery.from !== undefined && ageRangeQuery.to !== undefined) {
-      let players = [];
+      let players: Player[] = [];
 
       await this.playersReference.where('age', '>', timestampFrom)
         .where('age', '<', timestampTo)
@@ -148,21 +150,6 @@ export class AppService {
     }
   }
 
-  async searchCustomMode(selectedTeamName: string) {
-    let players = [];
-
-    await this.playersReference
-      .where('team', '==', selectedTeamName)
-      .get()
-      .then(response => {
-        players = this.filterUsersFromResponse(response);
-      })
-      .catch(error => {
-        this.logService.handleError(error);
-      });
-    return players;
-  }
-
   generateRangeQuery(selectedRange: number) {
     const defaultDateFormat = 'D MMMM YYYY';
 
@@ -174,18 +161,13 @@ export class AppService {
     return { from: new Date(rangeFrom), to: new Date(rangeTo) };
   }
 
-  filterUsersFromResponse(response: any) {
-    const players = [];
+  filterUsersFromResponse(response: any): Player[] {
+    const players: Player[] = [];
 
-    response.forEach(player => {
-      const playerData = player.data();
-      players.push({
-        name: playerData.name,
-        surname: playerData.surname,
-        age: playerData.age.toDate(),
-        team: playerData.team,
-        email: playerData.email
-      });
+    response.forEach(data => {
+      const playerData = data.data();
+      const player = new Player(playerData.name, playerData.surname, playerData.age.toDate(), playerData.team, playerData.email, playerData.photoURL);
+      players.push(player);
     });
     return players;
   }

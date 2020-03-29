@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { TeamModel } from '../../../models/team.model';
+import { Team } from '../../../models/team';
 import { FormControl } from '@angular/forms';
 
 @Component({

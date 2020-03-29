@@ -1,54 +1,61 @@
-<h4>Teams</h4>
-<mat-checkbox (change)=onChangeMode($event)
-              [checked]=isCustomMode()> Custom Selection Mode
+<mat-checkbox
+  (change)=onChangeMode($event)
+  [checked]=isCustomMode()
+  class="app-custom-recipients">
+  Custom Selection Mode
 </mat-checkbox>
-
-<button (click)="add()">Add 10 fake rows</button>
-
-<div class="app-search-container">
-
-<ng-form>
-  <mat-form-field>
+<!--<button (click)="add()">Add 10 fake rows</button>-->
+<ng-form class="send-form">
+  <mat-form-field class="send-field">
     <mat-label>Subject</mat-label>
     <input matInput [formControl]="subjectFormControl" type="text" placeholder="Post subject">
   </mat-form-field>
 
-  <mat-form-field class="app-search-select-team">
-    <mat-label >Message</mat-label>
+  <mat-form-field class="send-field">
+    <mat-label>Message</mat-label>
     <input matInput [formControl]="messageFormControl" placeholder="Post message">
   </mat-form-field>
 
-  <button mat-icon-button [disabled]="isFormNotFilled()" (click)="onSubmitPost()">
+  <button mat-icon-button class="send-field" [disabled]="isFormNotFilled()" (click)="onSubmitPost()">
     <mat-icon>send</mat-icon>
+    Send Message
   </button>
 </ng-form>
 
-<mat-form-field class="app-search-select-team">
-  <mat-label>Select team</mat-label>
-  <mat-select [formControl]="teamFormControl">
-    <mat-option (click)="onTeamSelection($event)" *ngFor="let team of teams" [value]="team.name">
-      {{team.name}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<ng-form class="search-form">
+  <mat-form-field class="search-field">
+    <mat-label>Select team</mat-label>
+    <mat-select [formControl]="teamFormControl">
+      <mat-option (click)="onTeamSelection($event)" *ngFor="let team of teams" [value]="team.name">
+        {{team.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<mat-form-field class="app-search-select-team" *ngIf="mode === 'standard'">
-  <mat-label>Select team age range</mat-label>
-  <mat-select [formControl]="teamRangeFormControl">
-    <mat-option (click)="onAgeRangeSelection(teamRange)" *ngFor="let teamRange of teamRanges" [value]="teamRange">
-      {{'K' + teamRange}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+  <mat-form-field *ngIf="mode === 'standard'" class="search-field">
+    <mat-label>Select team age range</mat-label>
+    <mat-select [formControl]="teamRangeFormControl">
+      <mat-option (click)="onAgeRangeSelection(teamRange)" *ngFor="let teamRange of teamRanges" [value]="teamRange">
+        {{'K' + teamRange}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<button mat-icon-button [disabled]="isSearchDisabled()" (click)="onSearch()">
-  <mat-icon>search</mat-icon>
-</button>
+  <div>
+  <button mat-icon-button
+          [disabled]="isSearchDisabled()"
+          (click)="onSearch()"
+          class="search-button">
+    <mat-icon>search</mat-icon>
+  </button>
 
-<button mat-icon-button (click)="onResetSearch()">
-  <mat-icon>cancel</mat-icon>
-</button>
-</div>
+  <button mat-icon-button
+          (click)="onResetSearch()"
+          class="search-button">
+    <mat-icon>cancel</mat-icon>
+  </button>
+  </div>
+</ng-form>
 
 <table mat-table [dataSource]="players" class="mat-elevation-z8">
 
@@ -70,28 +77,37 @@
     </td>
   </ng-container>
 
+  <ng-container matColumnDef="photoURL">
+    <th mat-header-cell *matHeaderCellDef> Picture</th>
+    <mat-card>
+      <td mat-cell *matCellDef="let element">
+        <img mat-card-avatar [src]="element.photoURL" class="profile-header-image">
+      </td>
+    </mat-card>
+  </ng-container>
+
   <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <th mat-header-cell *matHeaderCellDef> Name</th>
     <td mat-cell *matCellDef="let element"> {{element.name}} </td>
   </ng-container>
 
   <ng-container matColumnDef="surname">
-    <th mat-header-cell *matHeaderCellDef> Surname </th>
+    <th mat-header-cell *matHeaderCellDef> Surname</th>
     <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
   </ng-container>
 
   <ng-container matColumnDef="age">
-    <th mat-header-cell *matHeaderCellDef> Date of birth </th>
+    <th mat-header-cell *matHeaderCellDef> Date of birth</th>
     <td mat-cell *matCellDef="let element"> {{element.age | date:'medium'}} </td>
   </ng-container>
 
   <ng-container matColumnDef="team">
-    <th mat-header-cell *matHeaderCellDef> Team </th>
+    <th mat-header-cell *matHeaderCellDef> Team</th>
     <td mat-cell *matCellDef="let element"> {{element.team}} </td>
   </ng-container>
 
   <ng-container matColumnDef="email">
-    <th mat-header-cell *matHeaderCellDef> Email </th>
+    <th mat-header-cell *matHeaderCellDef> Email</th>
     <td mat-cell *matCellDef="let element"> {{element.email}} </td>
   </ng-container>
 

@@ -68,6 +68,7 @@ const MATERIAL_MODULES = [
   MatBadgeModule,
   MatBottomSheetModule,
   MatButtonModule,
+  MatIconModule,
   MatButtonToggleModule,
   MatCardModule,
   MatCheckboxModule,

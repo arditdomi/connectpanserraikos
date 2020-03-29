@@ -3,17 +3,39 @@
   <p>Player details</p>
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput [(ngModel)]="data.name">
+    <input matInput
+           [(ngModel)]="data.name"
+           [formControl]="nameFormControl">
+    <mat-error *ngIf="nameFormControl.errors">
+      <mat-icon> warning</mat-icon>
+      Name is required
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Surname</mat-label>
-    <input matInput [(ngModel)]="data.surname">
+    <input matInput
+           [(ngModel)]="data.surname"
+           [formControl]="surnameFormControl">
+    <mat-error *ngIf="surnameFormControl.errors">
+      <mat-icon> warning</mat-icon>
+      Surname is required
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Email</mat-label>
-    <input matInput [(ngModel)]="data.email">
+    <input matInput
+    [(ngModel)]="data.email"
+    [formControl]="emailFormControl">
+    <mat-error *ngIf="emailFormControl.hasError('email')">
+      <mat-icon> warning</mat-icon>
+      Invalid email
+    </mat-error>
+    <mat-error *ngIf="emailFormControl.hasError('required')">
+      <mat-icon> warning</mat-icon>
+      Email is required
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field>
@@ -21,22 +43,36 @@
     <input matInput [matDatepicker]="picker"
            [formControl]="dateFormControl"
            (dateChange)="onDateSelect()">
+    <mat-error *ngIf="dateFormControl.errors">
+      <mat-icon> warning</mat-icon>
+      Date of birth is required
+    </mat-error>
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Select team</mat-label>
-    <mat-select>
+    <mat-select [formControl]="teamFormControl">
       <mat-option (click)="onTeamSelection($event)" *ngFor="let team of data.teams" [value]="team.name">
         {{team.name}}
       </mat-option>
     </mat-select>
+    <mat-error *ngIf="teamFormControl.errors">
+      <mat-icon> warning</mat-icon>
+      Team selection is required
+    </mat-error>
   </mat-form-field>
 
+    <label for="file">Upload picture</label>
+    <input type="file"
+           id="file"
+           (change)="onUploadPicture($event)">
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Add</button>
+  <button mat-button cdkFocusInitial
+          [mat-dialog-close]="data"
+          [disabled]="isAdditionInvalid()">Add</button>
   <button mat-button [mat-dialog-close]="null" cdkFocusInitial>Cancel</button>
 </div>
 

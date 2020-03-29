@@ -1,6 +1,7 @@
 
 table {
   width: 100%;
+  min-width: 1000px;
 }
 
 .profile-card {
@@ -11,4 +12,45 @@ table {
   background-size: cover;
 }
 
+.app-custom-recipients {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 5px;
+}
 
+.send-form {
+  display: flex;
+  justify-content: center;
+}
+
+.send-field {
+  margin: 5px;
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  margin-left: 40px;
+}
+
+.search-field {
+  margin: 5px;
+}
+
+.search-button {
+  margin-top: 12px;
+  margin-left: 5px;
+}
+
+@media (max-width: 600px) {
+  .search-form {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0px;
+  }
+
+  .send-form {
+    display: flex;
+    flex-direction: column;
+  }
+}

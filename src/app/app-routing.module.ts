@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'logout', redirectTo: 'login'},
   { path: 'reset-account', component: ResetPasswordComponent },
-  { path: '', component: SidenavComponent, canActivate: [] , children:  [
+  { path: '', component: SidenavComponent, canActivate: [AuthGuard] , children:  [
         { path: 'profile', component: ProfileComponent },
         { path: 'message', component: PostComponent },
         { path: 'teams', component: TeamsComponent },

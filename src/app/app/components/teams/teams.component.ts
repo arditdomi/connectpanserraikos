@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AppService } from '../../services/app.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
-import { UserModel } from '../../../auth/model/user.model';
+import { Player } from '../../models/player';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +20,7 @@ export class TeamsComponent implements OnInit {
   postForm: FormGroup;
 
   teams: any[] = [];
-  players: any[] = [];
+  players: Player[] = [];
 
   selectedRange;
   selectedTeamName;
@@ -34,7 +34,7 @@ export class TeamsComponent implements OnInit {
 
   displayedColumns: string[];
 
-  selection = new SelectionModel<UserModel>(true, []);
+  selection = new SelectionModel<Player>(true, []);
 
   constructor(private route: ActivatedRoute,
               private appService: AppService,
@@ -50,15 +50,15 @@ export class TeamsComponent implements OnInit {
     this.loadTeams();
   }
 
-  private isCustomMode(): boolean {
+  isCustomMode(): boolean {
     return this.mode === 'custom';
   }
 
-  private isStandardMode(): boolean {
+  isStandardMode(): boolean {
     return this.mode === 'standard';
   }
 
-  private isSearchDisabled(): boolean {
+  isSearchDisabled(): boolean {
     if (this.isStandardMode()) {
       return !(this.selectedTeamName && this.selectedRange);
     } else {
@@ -77,12 +77,12 @@ export class TeamsComponent implements OnInit {
 
   private setModeToCustom() {
     this.mode = 'custom';
-    this.displayedColumns = ['select', 'name', 'surname', 'age', 'email', 'team'];
+    this.displayedColumns = ['select', 'photoURL', 'name', 'surname', 'age', 'email', 'team'];
   }
 
   private setModeToStandard() {
     this.mode = 'standard';
-    this.displayedColumns = ['name', 'surname', 'age', 'email', 'team'];
+    this.displayedColumns = ['name', 'photoURL', 'surname', 'age', 'email', 'team'];
   }
 
   isAllSelected() {
@@ -99,11 +99,11 @@ export class TeamsComponent implements OnInit {
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: UserModel): string {
+  checkboxLabel(row?: Player): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.displayName + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.name + 1}`;
   }
 
   isFormNotFilled(): boolean {
@@ -113,12 +113,12 @@ export class TeamsComponent implements OnInit {
 
   add() {
     for (let i=0; i<10; i++) {
-      this.players.push({ name: 'name', surname: 'surname', age: new Date(), team: 'team'});
+      this.players.push(new Player('name', 'surname', new Date(), 'team', 'fakemail'));
     }
   }
 
   onSubmitPost() {
-    let recipients = [];
+    let recipients: Player[];
     if (this.isStandardMode()) {
       recipients = this.players;
     } else {
@@ -177,7 +177,7 @@ export class TeamsComponent implements OnInit {
     this.selectedTeamName = null;
     this.teamFormControl.reset();
     this.teamRangeFormControl.reset();
-    this.selection = new SelectionModel<UserModel>(true, []);
+    this.selection = new SelectionModel<Player>(true, []);
   }
 
   onSearch() {
@@ -186,9 +186,7 @@ export class TeamsComponent implements OnInit {
         this.players = players;
       });
     } else {
-      this.appService.searchCustomMode(this.selectedTeamName).then(players => {
-        this.players = players;
-      });
+      this.getPlayersInTeam(this.selectedTeamName);
     }
   }
 }

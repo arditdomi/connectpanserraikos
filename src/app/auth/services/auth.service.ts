@@ -20,19 +20,6 @@ export class AuthService {
     })
   }
 
-  // async googleSignIn() {
-  //   const provider = new auth.GoogleAuthProvider();
-  //   const credential = await this.angularFireAuth.auth.signInWithPopup(provider);
-  //   return this.updateUserData(credential.user);
-  // }
-  //
-  // async facebookSignIn() {
-  //   const provider = new auth.FacebookAuthProvider();
-  //   const credential = await this.angularFireAuth.auth.signInWithPopup(provider);
-  //   return this.updateUserData(credential.user);
-  //
-  // }
-
   async logout() {
     await this.angularFireAuth.auth.signOut();
     return this.router.navigate(['/login']);
