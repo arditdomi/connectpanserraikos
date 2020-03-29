@@ -125,7 +125,7 @@ firebase.initializeApp(environment.firebaseConfig);
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     NgxAuthFirebaseUIModule.forRoot(environment.firebaseConfig,
-      () => 'connect-panserraikos', environment.config)
+      null, environment.config)
   ],
   declarations: [
     AppComponent,

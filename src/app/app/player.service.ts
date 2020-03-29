@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { UserModel } from './../auth/model/user.model';
+import { UserModel } from '../auth/model/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,14 +25,4 @@ export class AuthService {
       );
   }
 
-  updateProfilePicture(user, photo) {
-    const userRef: AngularFirestoreDocument<UserModel> = this.angularFirestore.doc(`users/${user.id}`);
-    const data = {
-      uid: user.uid,
-      email: user.email,
-      photoURL: photo,
-      displayName: user.displayName
-    };
-    return userRef.set(data, {merge: true});
-  }
 }
