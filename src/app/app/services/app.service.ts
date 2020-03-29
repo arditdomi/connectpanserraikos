@@ -125,7 +125,7 @@ export class AppService {
     return (teamData !== undefined);
   }
 
-  async search(selectedRange: number, selectedTeamName: string) {
+  async searchStandardMode(selectedRange: number, selectedTeamName: string) {
     const ageRangeQuery = this.generateRangeQuery(selectedRange);
 
     const timestampFrom = firestore.Timestamp.fromDate(ageRangeQuery.from);
@@ -146,6 +146,21 @@ export class AppService {
         });
       return players;
     }
+  }
+
+  async searchCustomMode(selectedTeamName: string) {
+    let players = [];
+
+    await this.playersReference
+      .where('team', '==', selectedTeamName)
+      .get()
+      .then(response => {
+        players = this.filterUsersFromResponse(response);
+      })
+      .catch(error => {
+        this.logService.handleError(error);
+      });
+    return players;
   }
 
   generateRangeQuery(selectedRange: number) {

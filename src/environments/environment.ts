@@ -3,16 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
+  production: true,
   firebaseConfig: {
-    apiKey: "AIzaSyCZQFv-35ZVhtiMQDJoZLdocn8H4BXcHuM",
-    authDomain: "my-thesis-1583030925980.firebaseapp.com",
-    databaseURL: "https://my-thesis-1583030925980.firebaseio.com",
-    projectId: "my-thesis-1583030925980",
-    storageBucket: "my-thesis-1583030925980.appspot.com",
-    messagingSenderId: "62837386707",
-    appId: "1:62837386707:web:6cfe415531edc1c3e99326",
-    measurementId: "G-GKC2VX0DW1"
+    apiKey: "AIzaSyCf3TIuXdFasdf4fHqkSolmzFv9zzU0tPw",
+    authDomain: "connect-panserraikos.firebaseapp.com",
+    databaseURL: "https://connect-panserraikos.firebaseio.com",
+    projectId: "connect-panserraikos",
+    storageBucket: "connect-panserraikos.appspot.com",
+    messagingSenderId: "640393862882",
+    appId: "1:640393862882:web:0954b6f3208ffe3f5e48bb",
+    measurementId: "G-M1XYZC3JP7"
   },
   config: {
   enableFirestoreSync: true, // enable/disable autosync users with firestore
