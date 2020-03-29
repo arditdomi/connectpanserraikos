@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppService } from '../../services/app.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { SelectionModel } from '@angular/cdk/collections';
+import { UserModel } from '../../../auth/model/user.model';
 
 @Component({
   selector: 'app-profile',
@@ -17,8 +19,8 @@ export class TeamsComponent implements OnInit {
 
   postForm: FormGroup;
 
-  teams: any[];
-  players: any[];
+  teams: any[] = [];
+  players: any[] = [];
 
   selectedRange;
   selectedTeamName;
@@ -28,7 +30,11 @@ export class TeamsComponent implements OnInit {
 
   teamRanges = [19, 17, 15, 13];
 
-  displayedColumns: string[] = ['name', 'surname', 'age', 'email', 'team'];
+  mode = 'custom';
+
+  displayedColumns: string[];
+
+  selection = new SelectionModel<UserModel>(true, []);
 
   constructor(private route: ActivatedRoute,
               private appService: AppService,
@@ -40,7 +46,64 @@ export class TeamsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setModeToCustom();
     this.loadTeams();
+  }
+
+  private isCustomMode(): boolean {
+    return this.mode === 'custom';
+  }
+
+  private isStandardMode(): boolean {
+    return this.mode === 'standard';
+  }
+
+  private isSearchDisabled(): boolean {
+    if (this.isStandardMode()) {
+      return !(this.selectedTeamName && this.selectedRange);
+    } else {
+      return !this.selectedTeamName;
+    }
+  }
+
+
+  onChangeMode($event) {
+    if ($event.checked) {
+      this.setModeToCustom();
+    } else {
+      this.setModeToStandard();
+    }
+  }
+
+  private setModeToCustom() {
+    this.mode = 'custom';
+    this.displayedColumns = ['select', 'name', 'surname', 'age', 'email', 'team'];
+  }
+
+  private setModeToStandard() {
+    this.mode = 'standard';
+    this.displayedColumns = ['name', 'surname', 'age', 'email', 'team'];
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.players.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.players.forEach(row => this.selection.select(row));
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: UserModel): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.displayName + 1}`;
   }
 
   isFormNotFilled(): boolean {
@@ -48,24 +111,36 @@ export class TeamsComponent implements OnInit {
       || (this.messageFormControl.value === null)
   }
 
+  add() {
+    for (let i=0; i<10; i++) {
+      this.players.push({ name: 'name', surname: 'surname', age: new Date(), team: 'team'});
+    }
+  }
+
   onSubmitPost() {
-    const recipients = this.initRecipients();
+    let recipients = [];
+    if (this.isStandardMode()) {
+      recipients = this.players;
+    } else {
+      recipients = this.selection.selected;
+    }
+    const generateRecipientsEmails = this.generateRecipientsEmails(recipients);
 
     const payload = {
       subject: this.subjectFormControl.value,
       message: this.messageFormControl.value,
-      recipients,
+      recipients: generateRecipientsEmails,
       idToken: this.idToken
     };
 
     this.appService.submitPost(payload);
   }
 
-  initRecipients(): string {
+  generateRecipientsEmails(players): string {
     let recipients = '';
     const totalPlayers = this.players.length -1;
 
-    this.players.forEach((player, index) => {
+    players.forEach((player, index) => {
       if (index ===  totalPlayers) {
         recipients += player.email;
       } else {
@@ -102,11 +177,18 @@ export class TeamsComponent implements OnInit {
     this.selectedTeamName = null;
     this.teamFormControl.reset();
     this.teamRangeFormControl.reset();
+    this.selection = new SelectionModel<UserModel>(true, []);
   }
 
   onSearch() {
-    this.appService.search(this.selectedRange, this.selectedTeamName).then(players => {
-      this.players = players;
-    });
+    if (this.mode === 'standard') {
+      this.appService.searchStandardMode(this.selectedRange, this.selectedTeamName).then(players => {
+        this.players = players;
+      });
+    } else {
+      this.appService.searchCustomMode(this.selectedTeamName).then(players => {
+        this.players = players;
+      });
+    }
   }
 }

@@ -95,7 +95,7 @@ export class ManageComponent implements OnInit{
     this.teams = this.appService.getTeams();
   }
 
-  private addFakeEntities() {
+  addFakeEntities() {
     const teams = ['football', 'basketball', 'volley', 'hockey'];
     teams.forEach(team => {
       this.appService.createTeam({name: team})
