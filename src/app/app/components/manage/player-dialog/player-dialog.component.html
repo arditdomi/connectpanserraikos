@@ -4,7 +4,6 @@
   <mat-form-field>
     <mat-label>Name</mat-label>
     <input matInput
-           [(ngModel)]="data.name"
            [formControl]="nameFormControl">
     <mat-error *ngIf="nameFormControl.errors">
       <mat-icon> warning</mat-icon>
@@ -15,7 +14,6 @@
   <mat-form-field>
     <mat-label>Surname</mat-label>
     <input matInput
-           [(ngModel)]="data.surname"
            [formControl]="surnameFormControl">
     <mat-error *ngIf="surnameFormControl.errors">
       <mat-icon> warning</mat-icon>
@@ -26,7 +24,6 @@
   <mat-form-field>
     <mat-label>Email</mat-label>
     <input matInput
-    [(ngModel)]="data.email"
     [formControl]="emailFormControl">
     <mat-error *ngIf="emailFormControl.hasError('email')">
       <mat-icon> warning</mat-icon>
@@ -72,7 +69,6 @@
 <div mat-dialog-actions>
   <button mat-button cdkFocusInitial
           [mat-dialog-close]="data"
-          [disabled]="isAdditionInvalid()">Add</button>
+          [disabled]="isAdditionInvalid() || isLoading">Add</button>
   <button mat-button [mat-dialog-close]="null" cdkFocusInitial>Cancel</button>
 </div>
-

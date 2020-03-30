@@ -5,8 +5,8 @@ import { PlayerDialogComponent } from './player-dialog/player-dialog.component';
 import { TeamDialogComponent } from './team-dialog/team-dialog.component';
 import { LogService } from '../../services/log.service';
 import { DeleteTeamDialogComponent } from './delete-team-dialog/delete-team-dialog.component';
-import { DeletePlayerDialogComponent } from './delete-player-dialog/delete-player-dialog.component';
 import { Player } from '../../models/player';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-manage',
@@ -15,7 +15,12 @@ import { Player } from '../../models/player';
 })
 export class ManageComponent implements OnInit {
 
-  teams;
+  teams: any[] = [];
+
+  displayedColumns: string[];
+  teamsDisplayedColumns: string[] = ['name'];
+
+  players: Player[] = [];
 
   constructor(
     public dialog: MatDialog,
@@ -24,11 +29,12 @@ export class ManageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.reloadTeams();
+    this.displayedColumns = ['name', 'photoURL', 'surname', 'age', 'email', 'team', 'edit', 'delete'];
+    this.reload();
   }
 
   onAddPlayer() {
-    this.reloadTeams();
+    this.reload();
     const dialogRef = this.dialog.open(PlayerDialogComponent, {
       width: '550px',
       data: { teams: this.teams }
@@ -38,6 +44,25 @@ export class ManageComponent implements OnInit {
       if (player) {
         if (this.appService.isPlayerValid(player)) {
           this.appService.createPlayer(player);
+          this.reload();
+        } else {
+          this.logService.handleError('Please provide all the player details');
+        }
+      }
+    });
+  }
+
+  onEditPlayer(row: any) {
+    const dialogRef = this.dialog.open(PlayerDialogComponent, {
+      width: '550px',
+      data: { teams: this.teams, player: row, disableEmail: true }
+    });
+
+    dialogRef.afterClosed().subscribe((player) => {
+      if (player) {
+        if (this.appService.isPlayerValid(player)) {
+          this.appService.editPlayer(player);
+          this.reload();
         } else {
           this.logService.handleError('Please provide all the player details');
         }
@@ -55,6 +80,7 @@ export class ManageComponent implements OnInit {
       if (teamData) {
         if (this.appService.isTeamValid(teamData)) {
           this.appService.createTeam(teamData);
+          this.reload();
         } else {
           this.logService.handleError('Please provide all team details');
         }
@@ -63,7 +89,7 @@ export class ManageComponent implements OnInit {
   }
 
   onDeleteTeam() {
-    this.reloadTeams();
+    this.reload();
     const dialogRef = this.dialog.open(DeleteTeamDialogComponent, {
       width: '450px',
       data: { teams: this.teams }
@@ -73,6 +99,7 @@ export class ManageComponent implements OnInit {
       if (teamData) {
         if (this.appService.isTeamValid(teamData.team)) {
           this.appService.deleteTeam(teamData.team);
+          this.reload();
         } else {
           this.logService.handleError('Please provide all team details');
         }
@@ -80,21 +107,27 @@ export class ManageComponent implements OnInit {
     });
   }
 
-  onDeletePlayer() {
-    const dialogRef = this.dialog.open(DeletePlayerDialogComponent, {
-      width: '450px',
-      data: {}
+  onDeletePlayer(row) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '250px',
+      data: { question: `Delete player ${row.name}` }
     });
 
-    dialogRef.afterClosed().subscribe(playerData => {
-      if (playerData !== null && playerData.email) {
-        this.appService.deletePlayer(playerData.email);
+    dialogRef.afterClosed().subscribe(data => {
+      if (data.answer === 'yes') {
+        this.appService.deletePlayer(row.email);
+        this.reload();
+      } else {
+       this.logService.showMessage('Deletion cancelled');
       }
     });
   }
 
-  private reloadTeams() {
+  reload() {
     this.teams = this.appService.getTeams();
+    this.appService.getPlayers().then(players => {
+      this.players = players;
+    });
   }
 
   addFakeEntities() {

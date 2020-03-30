@@ -62,6 +62,7 @@ import { PlayerDialogComponent } from './app/components/manage/player-dialog/pla
 import { TeamDialogComponent } from './app/components/manage/team-dialog/team-dialog.component';
 import { DeleteTeamDialogComponent } from './app/components/manage/delete-team-dialog/delete-team-dialog.component';
 import { DeletePlayerDialogComponent } from './app/components/manage/delete-player-dialog/delete-player-dialog.component';
+import { ConfirmationDialogComponent } from './app/components/confirmation-dialog/confirmation-dialog.component';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -141,7 +142,8 @@ firebase.initializeApp(environment.firebaseConfig);
     PlayerDialogComponent,
     TeamDialogComponent,
     DeleteTeamDialogComponent,
-    DeletePlayerDialogComponent
+    DeletePlayerDialogComponent,
+    ConfirmationDialogComponent
   ],
   providers: [
     AngularFireAuth,
@@ -151,7 +153,8 @@ firebase.initializeApp(environment.firebaseConfig);
     PlayerDialogComponent,
     TeamDialogComponent,
     DeleteTeamDialogComponent,
-    DeletePlayerDialogComponent
+    DeletePlayerDialogComponent,
+    ConfirmationDialogComponent
   ],
   bootstrap: [AppComponent]
 })

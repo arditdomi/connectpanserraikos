@@ -22,10 +22,31 @@ export class PlayerDialogComponent {
   surnameFormControl: FormControl = new FormControl('', Validators.required);
   teamFormControl: FormControl = new FormControl('', Validators.required);
 
+  isLoading = false;
+
   constructor(public dialogRef: MatDialogRef<PlayerDialogComponent>,
               private authService: AuthService,
               private logService: LogService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {}
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+    if (this.data.player) {
+      const player = this.data.player;
+      this.nameFormControl.setValue(player.name);
+      this.data.name = player.name;
+      this.surnameFormControl.setValue(player.surname);
+      this.data.surname = player.surname;
+      if (this.data.disableEmail) {
+        this.emailFormControl.disable();
+      }
+      this.emailFormControl.setValue(player.email);
+      this.data.email = player.email;
+      this.teamFormControl.setValue(player.team);
+      this.data.team = player.team;
+      this.dateFormControl.setValue(player.age);
+      this.data.age = player.age;
+      this.data.photoURL = player.photoURL;
+    }
+    this.listenToValueChanges();
+  }
 
   onTeamSelection($event) {
     this.data.team = $event.target.innerText;
@@ -44,15 +65,40 @@ export class PlayerDialogComponent {
   }
 
   async onUploadPicture($event) {
+    this.isLoading = true;
     const file = $event.target.files[0];
     const email = this.emailFormControl.value;
     if (email) {
       const imageReference = await this.authService.uploadFile(file, email);
       imageReference.getDownloadURL().then(url => {
         this.data.photoURL = url;
+        this.isLoading = false;
+        this.logService.showMessage('Image was uploaded successfully');
       });
     } else {
       this.logService.handleError('You need to provide an email before uploading a profile picture');
     }
+  }
+
+  private listenToValueChanges() {
+    this.nameFormControl.valueChanges.subscribe(name => {
+      this.data.name = name;
+    });
+
+    this.surnameFormControl.valueChanges.subscribe(surname => {
+      this.data.surname = surname;
+    });
+
+    this.emailFormControl.valueChanges.subscribe(email => {
+      this.data.email = email;
+    });
+
+    this.dateFormControl.valueChanges.subscribe(date => {
+      this.data.age = date;
+    });
+
+    this.teamFormControl.valueChanges.subscribe(team => {
+      this.data.team = team;
+    });
   }
 }

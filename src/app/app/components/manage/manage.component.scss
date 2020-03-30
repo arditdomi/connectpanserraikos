@@ -1,0 +1,16 @@
+table {
+  width: 100%;
+  min-width: 1000px;
+}
+
+.add-button {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-right: 90px;
+}
+
+.refresh-button {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: -33px;
+}

@@ -12,25 +12,11 @@
                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
       <mat-nav-list>
 
-<!--        <mat-list-item [routerLink]="'/login'" routerLinkActive="active">-->
-<!--          <button mat-icon-button>-->
-<!--            <mat-icon>vpn_key</mat-icon>-->
-<!--          </button>-->
-<!--          Login-->
-<!--        </mat-list-item>-->
-
         <mat-list-item [routerLink]="'/profile'" routerLinkActive="active">
           <button mat-icon-button>
             <mat-icon>account_circle</mat-icon>
           </button>
           Profile
-        </mat-list-item>
-
-        <mat-list-item [routerLink]="'/message'" routerLinkActive="active">
-          <button mat-icon-button>
-            <mat-icon>note_add</mat-icon>
-          </button>
-          New Post
         </mat-list-item>
 
         <mat-list-item (click)="navigateToTeams()" routerLinkActive="active">

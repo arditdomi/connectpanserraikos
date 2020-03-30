@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { firestore } from 'firebase';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Player } from '../models/player';
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -61,20 +62,23 @@ export class AppService {
   }
 
   createPlayer(playerData) {
-    const player = {
-      name: playerData.name,
-      surname: playerData.surname,
-      age: playerData.age,
-      team: playerData.team,
-      email: playerData.email,
-      photoURL: playerData.photoURL
-    };
+    const player = this.getPlayerObject(playerData);
     this.playersReference.doc(player.email).set(player).then(() => {
       this.logService.showMessage('Player was added successfully');
     })
       .catch(error => {
         this.logService.handleError('Error adding player: ' + error);
       });
+  }
+
+  editPlayer(playerData) {
+    const updatedPlayer = this.getPlayerObject(playerData);
+
+    this.playersReference.doc(updatedPlayer.email).update(updatedPlayer).then(() => {
+      this.logService.showMessage('Player was updated successfully');
+    }).catch(error => {
+        this.logService.handleError('Error updating player: ' + error);
+    });
   }
 
   createTeam(teamData) {
@@ -176,12 +180,25 @@ export class AppService {
 
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       })
     };
 
     this.http.post('http://83.212.103.26:8080/new-mail', payload, httpOptions).subscribe(result => {
-      console.log(result);
+      this.logService.showMessage(result);
+    }, error => {
+      this.logService.handleError(error.error.message);
     });
+  }
+
+  private getPlayerObject(playerData) {
+    return  {
+      name: playerData.name,
+      surname: playerData.surname,
+      age: playerData.age,
+      team: playerData.team,
+      email: playerData.email,
+      photoURL: playerData.photoURL
+    };
   }
 }

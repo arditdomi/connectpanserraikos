@@ -4,6 +4,8 @@ import { AppService } from '../../services/app.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Player } from '../../models/player';
+import { LogService } from '../../services/log.service';
+import { apiKey } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-profile',
@@ -11,8 +13,6 @@ import { Player } from '../../models/player';
   styleUrls: ['teams.component.scss']
 })
 export class TeamsComponent implements OnInit {
-
-  idToken: string = 'Fg5I7SNo5kZZ67nmJAXG8JuMmXW3vEHx&VER=8&RID=rpc&SID=fSj_tI6LLqpHjgQ9YwRjyg&CI=0&AID=0&TYPE=xmlhttp&zx=8vrj22o047o7&t=1';
 
   subjectFormControl: FormControl = new FormControl();
   messageFormControl: FormControl = new FormControl();
@@ -38,6 +38,7 @@ export class TeamsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private appService: AppService,
+              private logService: LogService,
               private formBuilder: FormBuilder) {
     this.postForm = this.formBuilder.group({
       subject: this.subjectFormControl,
@@ -130,7 +131,7 @@ export class TeamsComponent implements OnInit {
       subject: this.subjectFormControl.value,
       message: this.messageFormControl.value,
       recipients: generateRecipientsEmails,
-      idToken: this.idToken
+      idToken: apiKey
     };
 
     this.appService.submitPost(payload);

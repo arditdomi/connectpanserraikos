@@ -1,0 +1,22 @@
+<!--<mat-form-field>-->
+<!--  <mat-label>Name</mat-label>-->
+<!--  <input matInput-->
+<!--         [(ngModel)]="data.name"-->
+<!--         [formControl]="nameFormControl">-->
+<!--  <mat-error *ngIf="nameFormControl.errors">-->
+<!--    <mat-icon> warning</mat-icon>-->
+<!--    Name is required-->
+<!--  </mat-error>-->
+<!--</mat-form-field>-->
+<div class="question">{{question}}</div>
+<div mat-dialog-actions class="confirmation-buttons">
+<button mat-icon-button  [mat-dialog-close]="data" (click)="answerYes()">
+  <mat-icon>done</mat-icon>
+  Yes
+</button>
+
+<button mat-icon-button [mat-dialog-close]="data" (click)="answerNo()">
+  <mat-icon>delete</mat-icon>
+  No
+</button>
+</div>

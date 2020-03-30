@@ -1,7 +1,6 @@
 import { AfterContentChecked, AfterViewChecked, AfterViewInit, Component, ViewChild } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { FormControl, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
 import { NavigationExtras, Router } from '@angular/router';
 import { LogService } from '../../app/services/log.service';
 

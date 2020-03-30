@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { apiKey } from '../../../environments/environment';
 import { AppService } from '../services/app.service';
 
 @Component({
@@ -10,8 +10,6 @@ import { AppService } from '../services/app.service';
 })
 
 export class PostComponent implements OnInit {
-
-  idToken: string = 'Fg5I7SNo5kZZ67nmJAXG8JuMmXW3vEHx&VER=8&RID=rpc&SID=fSj_tI6LLqpHjgQ9YwRjyg&CI=0&AID=0&TYPE=xmlhttp&zx=8vrj22o047o7&t=1';
 
   subjectFormControl: FormControl = new FormControl();
   messageFormControl: FormControl = new FormControl();
@@ -45,7 +43,7 @@ export class PostComponent implements OnInit {
       message: this.messageFormControl.value,
       recipient: this.recipientFormControl.value,
       name: this.coachFormControl.value,
-      idToken: this.idToken
+      idToken: apiKey
     };
 
     this.appService.submitPost(payload);
