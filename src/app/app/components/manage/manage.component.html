@@ -91,6 +91,31 @@
         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Team description</th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      </ng-container>
+
+      <!-- Edit Column -->
+      <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef>
+          Edit
+        </th>
+        <td mat-cell *matCellDef="let row" (click)="onEditTeam(row)">
+          <mat-icon>edit</mat-icon>
+        </td>
+      </ng-container>
+
+      <!-- Delete Column -->
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef>
+          Delete
+        </th>
+        <td mat-cell *matCellDef="let row" (click)="onDeleteTeam(row)">
+          <mat-icon>delete</mat-icon>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="teamsDisplayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: teamsDisplayedColumns;">
       </tr>

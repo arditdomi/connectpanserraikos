@@ -1,8 +1,10 @@
 export class Team {
-  id: string;
+  name: string;
+  description: string;
 
-  constructor(id) {
-    this.id = id;
+  constructor(name, description) {
+    this.name = name;
+    this.description = description;
   }
 
 }

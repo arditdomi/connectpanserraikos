@@ -18,7 +18,7 @@ export class ManageComponent implements OnInit {
   teams: any[] = [];
 
   displayedColumns: string[];
-  teamsDisplayedColumns: string[] = ['name'];
+  teamsDisplayedColumns: string[] = ['name', 'description', 'edit', 'delete'];
 
   players: Player[] = [];
 
@@ -37,7 +37,11 @@ export class ManageComponent implements OnInit {
     this.reload();
     const dialogRef = this.dialog.open(PlayerDialogComponent, {
       width: '550px',
-      data: { teams: this.teams }
+      data: {
+        teams: this.teams,
+        title: 'Add player',
+        buttonTitle: 'Add'
+      }
     });
 
     dialogRef.afterClosed().subscribe((player) => {
@@ -55,7 +59,8 @@ export class ManageComponent implements OnInit {
   onEditPlayer(row: any) {
     const dialogRef = this.dialog.open(PlayerDialogComponent, {
       width: '550px',
-      data: { teams: this.teams, player: row, disableEmail: true }
+      data: { teams: this.teams, player: row, disableEmail: true, title: `Edit player ${row.name} ${row.surname}`,
+        buttonTitle: 'Edit'}
     });
 
     dialogRef.afterClosed().subscribe((player) => {
@@ -72,8 +77,11 @@ export class ManageComponent implements OnInit {
 
   onAddTeam() {
     const dialogRef = this.dialog.open(TeamDialogComponent, {
-      width: '450px',
-      data: {}
+      width: '350px',
+      data: {
+        title: 'Add team',
+        buttonTitle: 'Add'
+      }
     });
 
     dialogRef.afterClosed().subscribe(teamData => {
@@ -88,21 +96,42 @@ export class ManageComponent implements OnInit {
     });
   }
 
-  onDeleteTeam() {
-    this.reload();
-    const dialogRef = this.dialog.open(DeleteTeamDialogComponent, {
-      width: '450px',
-      data: { teams: this.teams }
+  onEditTeam(row: any) {
+    const dialogRef = this.dialog.open(TeamDialogComponent, {
+      width: '550px',
+      data: {
+        team: row,
+        disableName: true,
+        title: `Edit team ${row.name}`,
+        buttonTitle: 'Edit'
+      }
     });
 
-    dialogRef.afterClosed().subscribe(teamData => {
-      if (teamData) {
-        if (this.appService.isTeamValid(teamData.team)) {
-          this.appService.deleteTeam(teamData.team);
+    dialogRef.afterClosed().subscribe((team) => {
+      if (team) {
+        if (this.appService.isTeamValid(team)) {
+          this.appService.editTeam(team);
           this.reload();
         } else {
-          this.logService.handleError('Please provide all team details');
+          this.logService.handleError('Please provide all the player details');
         }
+      }
+    });
+  }
+
+  onDeleteTeam(row) {
+    this.reload();
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '250px',
+      data: { question: `Delete team ${row.name}` }
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      if (data.answer === 'yes') {
+        this.appService.deleteTeam(row.name);
+        this.reload();
+      } else {
+        this.logService.showMessage('Deletion cancelled');
       }
     });
   }
@@ -124,7 +153,9 @@ export class ManageComponent implements OnInit {
   }
 
   reload() {
-    this.teams = this.appService.getTeams();
+    this.appService.getTeams().then(teams => {
+      this.teams = teams;
+    });
     this.appService.getPlayers().then(players => {
       this.players = players;
     });

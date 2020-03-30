@@ -1,13 +1,26 @@
-<h1 mat-dialog-title>Add Player</h1>
+<h1 mat-dialog-title>{{title}}</h1>
 <div mat-dialog-content>
-  <p>Player details</p>
-  <mat-form-field>
+  <p>Team details</p>
+  <mat-form-field class="team-field">
     <mat-label>Name</mat-label>
-    <input matInput [(ngModel)]="data.name">
+    <input matInput [formControl]="nameFormControl">
+    <mat-error *ngIf="nameFormControl.errors">
+      <mat-icon> warning</mat-icon>
+      Name is required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="team-field">
+    <mat-label>Description</mat-label>
+    <input matInput [formControl]="descriptionFormControl">
+    <mat-error *ngIf="descriptionFormControl.errors">
+      <mat-icon> warning</mat-icon>
+      {{descriptionErrorMessage}}
+    </mat-error>
   </mat-form-field>
 
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Add team</button>
+  <button mat-button [disabled]="disableAddButton()" [mat-dialog-close]="data" cdkFocusInitial>{{buttonTitle}}</button>
   <button mat-button [mat-dialog-close]="null" cdkFocusInitial>Cancel</button>
 </div>

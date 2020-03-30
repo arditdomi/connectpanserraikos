@@ -14,18 +14,20 @@ export class AppService {
 
   teamsReference;
   playersReference;
+  usersReference;
 
   constructor(private angularFirestore: AngularFirestore,
               private logService: LogService,
               private http: HttpClient) {
     this.teamsReference = this.angularFirestore.collection('teams').ref;
+    this.usersReference = this.angularFirestore.collection('users').ref;
     this.playersReference = this.angularFirestore.collection('players').ref;
   }
 
-  getTeams() {
+  async getTeams() {
     const teams = [];
 
-    this.teamsReference.get()
+    await this.teamsReference.get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           teams.push(doc.data());
@@ -65,10 +67,18 @@ export class AppService {
     const player = this.getPlayerObject(playerData);
     this.playersReference.doc(player.email).set(player).then(() => {
       this.logService.showMessage('Player was added successfully');
-    })
-      .catch(error => {
-        this.logService.handleError('Error adding player: ' + error);
-      });
+    }).catch(error => {
+      this.logService.handleError('Error adding player: ' + error);
+    });
+  }
+
+  createTeam(teamData) {
+    const team = this.getTeamObject(teamData);
+    this.teamsReference.doc(`${team.name}`).set(team).then(() => {
+      this.logService.showMessage('Team was added successfully');
+    }).catch(error => {
+      this.logService.handleError('Error adding team: ' + error);
+    });
   }
 
   editPlayer(playerData) {
@@ -77,25 +87,25 @@ export class AppService {
     this.playersReference.doc(updatedPlayer.email).update(updatedPlayer).then(() => {
       this.logService.showMessage('Player was updated successfully');
     }).catch(error => {
-        this.logService.handleError('Error updating player: ' + error);
+      this.logService.handleError('Error updating player: ' + error);
     });
   }
 
-  createTeam(teamData) {
-    const team = { name: teamData.name };
-    this.teamsReference.doc(`${team.name}`).set(team).then(() => {
-      this.logService.showMessage('Team was added successfully');
-    })
-      .catch(error => {
-        this.logService.handleError('Error adding team: ' + error);
-      });
+  editTeam(teamData) {
+    const updatedTeam = this.getTeamObject(teamData);
+
+    this.teamsReference.doc(updatedTeam.name).update(updatedTeam).then(() => {
+      this.logService.showMessage('Team was updated successfully');
+    }).catch(error => {
+      this.logService.handleError('Error updating team: ' + error);
+    });
   }
 
   deleteTeam(teamName: string) {
     this.teamsReference.doc(teamName).delete().then(() => {
-        this.logService.showMessage('Team was deleted successfully');
-        this.deletePlayersInTeam(teamName);
-      })
+      this.logService.showMessage('Team was deleted successfully');
+      this.deletePlayersInTeam(teamName);
+    })
       .catch(error => {
         this.logService.handleError('Error deleting team: ' + error);
       });
@@ -122,7 +132,9 @@ export class AppService {
   }
 
   isTeamValid(teamData): boolean {
-    return (teamData !== undefined);
+    return (teamData !== undefined)
+      && (teamData.name !== undefined)
+      && (teamData.description !== undefined);
   }
 
   isPlayerValid(player): boolean {
@@ -192,13 +204,20 @@ export class AppService {
   }
 
   private getPlayerObject(playerData) {
-    return  {
+    return {
       name: playerData.name,
       surname: playerData.surname,
       age: playerData.age,
       team: playerData.team,
       email: playerData.email,
       photoURL: playerData.photoURL
+    };
+  }
+
+  private getTeamObject(teamData) {
+    return {
+      name: teamData.name,
+      description: teamData.description
     };
   }
 }

@@ -23,6 +23,8 @@ export class PlayerDialogComponent {
   teamFormControl: FormControl = new FormControl('', Validators.required);
 
   isLoading = false;
+  title;
+  buttonTitle;
 
   constructor(public dialogRef: MatDialogRef<PlayerDialogComponent>,
               private authService: AuthService,
@@ -45,6 +47,8 @@ export class PlayerDialogComponent {
       this.data.age = player.age;
       this.data.photoURL = player.photoURL;
     }
+    this.title = this.data.title;
+    this.buttonTitle = this.data.buttonTitle;
     this.listenToValueChanges();
   }
 

@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Add Player</h1>
+<h1 mat-dialog-title>{{title}}</h1>
 <div mat-dialog-content class="dialog-content">
   <p>Player details</p>
   <mat-form-field>
@@ -69,6 +69,6 @@
 <div mat-dialog-actions>
   <button mat-button cdkFocusInitial
           [mat-dialog-close]="data"
-          [disabled]="isAdditionInvalid() || isLoading">Add</button>
+          [disabled]="isAdditionInvalid() || isLoading">{{buttonTitle}}</button>
   <button mat-button [mat-dialog-close]="null" cdkFocusInitial>Cancel</button>
 </div>

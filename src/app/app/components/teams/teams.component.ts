@@ -166,7 +166,9 @@ export class TeamsComponent implements OnInit {
   }
 
   loadTeams() {
-    this.teams = this.appService.getTeams();
+    this.appService.getTeams().then(teams => {
+      this.teams = teams;
+    });
     this.appService.getPlayers().then(players => {
       this.players = players;
     });
