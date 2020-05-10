@@ -21,6 +21,7 @@ export class PlayerDialogComponent {
   nameFormControl: FormControl = new FormControl('', Validators.required);
   surnameFormControl: FormControl = new FormControl('', Validators.required);
   teamFormControl: FormControl = new FormControl('', Validators.required);
+  telephoneNumberFormControl: FormControl = new FormControl('', Validators.required);
 
   isLoading = false;
   title;
@@ -46,6 +47,8 @@ export class PlayerDialogComponent {
       this.dateFormControl.setValue(player.age);
       this.data.age = player.age;
       this.data.photoURL = player.photoURL;
+      this.telephoneNumberFormControl.setValue(player.telephoneNumber);
+      this.data.telephoneNumber = player.telephoneNumber;
     }
     this.title = this.data.title;
     this.buttonTitle = this.data.buttonTitle;
@@ -104,5 +107,9 @@ export class PlayerDialogComponent {
     this.teamFormControl.valueChanges.subscribe(team => {
       this.data.team = team;
     });
+
+    this.telephoneNumberFormControl.valueChanges.subscribe((number: string) => {
+      this.data.telephoneNumber = number;
+    })
   }
 }

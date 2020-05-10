@@ -6,6 +6,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Player } from '../../models/player';
 import { LogService } from '../../services/log.service';
 import { apiKey } from '../../../../environments/environment';
+import { WhatsAppService } from '../../services/whatsApp.service';
 
 @Component({
   selector: 'app-profile',
@@ -31,6 +32,8 @@ export class TeamsComponent implements OnInit {
   teamRanges = [19, 17, 15, 13];
 
   mode = 'custom';
+  whatsAppEnabled = false;
+  emailEnabled = false;
 
   displayedColumns: string[];
 
@@ -39,6 +42,7 @@ export class TeamsComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private appService: AppService,
               private logService: LogService,
+              private whatsAppService: WhatsAppService,
               private formBuilder: FormBuilder) {
     this.postForm = this.formBuilder.group({
       subject: this.subjectFormControl,
@@ -76,14 +80,24 @@ export class TeamsComponent implements OnInit {
     }
   }
 
+  onChangeEmailMode($event) {
+    this.emailEnabled = $event.checked;
+  }
+
+  onChangeWhatsAppMode($event) {
+    this.whatsAppEnabled = $event.checked;
+  }
+
+
+
   private setModeToCustom() {
     this.mode = 'custom';
-    this.displayedColumns = ['select', 'photoURL', 'name', 'surname', 'age', 'email', 'team'];
+    this.displayedColumns = ['select', 'photoURL', 'name', 'surname', 'number', 'age', 'email', 'team'];
   }
 
   private setModeToStandard() {
     this.mode = 'standard';
-    this.displayedColumns = ['name', 'photoURL', 'surname', 'age', 'email', 'team'];
+    this.displayedColumns = ['name', 'photoURL', 'surname', 'number', 'age', 'email', 'team'];
   }
 
   isAllSelected() {
@@ -112,12 +126,6 @@ export class TeamsComponent implements OnInit {
       || (this.messageFormControl.value === null)
   }
 
-  add() {
-    for (let i=0; i<10; i++) {
-      this.players.push(new Player('name', 'surname', new Date(), 'team', 'fakemail'));
-    }
-  }
-
   onSubmitPost() {
     let recipients: Player[];
     if (this.isStandardMode()) {
@@ -125,16 +133,27 @@ export class TeamsComponent implements OnInit {
     } else {
       recipients = this.selection.selected;
     }
-    const generateRecipientsEmails = this.generateRecipientsEmails(recipients);
 
-    const payload = {
-      subject: this.subjectFormControl.value,
-      message: this.messageFormControl.value,
-      recipients: generateRecipientsEmails,
-      idToken: apiKey
-    };
+    if (this.emailEnabled || this.whatsAppEnabled) {
 
-    this.appService.submitPost(payload);
+      if (this.emailEnabled) {
+        const generateRecipientsEmails = this.generateRecipientsEmails(recipients);
+        const emailPayload = {
+          subject: this.subjectFormControl.value,
+          message: this.messageFormControl.value,
+          recipients: generateRecipientsEmails,
+          idToken: apiKey
+        };
+
+        this.appService.sendEmails(emailPayload);
+      }
+
+      if (this.whatsAppEnabled) {
+        this.whatsAppService.sendWhatsAppMessages(this.messageFormControl.value, recipients, apiKey);
+      }
+    } else {
+      this.logService.handleError('Please select at least one way to notify users');
+    }
   }
 
   generateRecipientsEmails(players): string {

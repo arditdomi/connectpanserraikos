@@ -4,7 +4,21 @@
   class="app-custom-recipients">
   Custom Selection Mode
 </mat-checkbox>
-<!--<button (click)="add()">Add 10 fake rows</button>-->
+
+Select ways to notify
+<br>
+<mat-checkbox
+  (change)=onChangeEmailMode($event)
+  [checked]=emailEnabled>
+  Email
+</mat-checkbox>
+<br>
+<mat-checkbox
+  (change)=onChangeWhatsAppMode($event)
+  [checked]=whatsAppEnabled>
+  WhatsApp
+</mat-checkbox>
+
 <ng-form class="send-form">
   <mat-form-field class="send-field">
     <mat-label>Subject</mat-label>
@@ -99,6 +113,11 @@
   <ng-container matColumnDef="age">
     <th mat-header-cell *matHeaderCellDef> Date of birth</th>
     <td mat-cell *matCellDef="let element"> {{element.age | date:'medium'}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="number">
+    <th mat-header-cell *matHeaderCellDef> Number</th>
+    <td mat-cell *matCellDef="let element"> {{element.telephoneNumber}} </td>
   </ng-container>
 
   <ng-container matColumnDef="team">

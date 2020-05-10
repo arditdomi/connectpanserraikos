@@ -6,6 +6,7 @@ import { firestore } from 'firebase';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Player } from '../models/player';
 import * as firebase from 'firebase';
+import { serverEndpointUrl } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -140,7 +141,7 @@ export class AppService {
   isPlayerValid(player): boolean {
     return (player.name !== undefined) && (player.surname !== undefined)
       && (player.age !== undefined) && (player.team !== undefined)
-      && (player.email !== undefined);
+      && (player.email !== undefined) && (player.telephoneNumber !== undefined);
   }
 
   async searchStandardMode(selectedRange: number, selectedTeamName: string): Promise<Player[]> {
@@ -182,13 +183,13 @@ export class AppService {
 
     response.forEach(data => {
       const playerData = data.data();
-      const player = new Player(playerData.name, playerData.surname, playerData.age.toDate(), playerData.team, playerData.email, playerData.photoURL);
+      const player = new Player(playerData.name, playerData.surname, playerData.age.toDate(), playerData.team, playerData.email, playerData.telephoneNumber, playerData.photoURL);
       players.push(player);
     });
     return players;
   }
 
-  submitPost(payload) {
+  sendEmails(payload) {
 
     const httpOptions = {
       headers: new HttpHeaders({
@@ -196,7 +197,7 @@ export class AppService {
       })
     };
 
-    this.http.post('http://83.212.103.26:8080/new-mail', payload, httpOptions).subscribe(result => {
+    this.http.post(serverEndpointUrl + '/new-mail', payload, httpOptions).subscribe(result => {
       this.logService.showMessage(result);
     }, error => {
       this.logService.handleError(error.error.message);
@@ -210,7 +211,8 @@ export class AppService {
       age: playerData.age,
       team: playerData.team,
       email: playerData.email,
-      photoURL: playerData.photoURL
+      photoURL: playerData.photoURL,
+      telephoneNumber: playerData.telephoneNumber
     };
   }
 
