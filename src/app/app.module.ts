@@ -55,7 +55,6 @@ import { AngularFireDatabaseModule } from '@angular/fire/database-deprecated';
 import { environment } from '../environments/environment';
 import * as firebase from 'firebase';
 import { AuthGuard } from './auth/guards/auth.guard';
-import { PostComponent } from './app/posts/post.component';
 import { TeamsComponent } from './app/components/teams/teams.component';
 import { ManageComponent } from './app/components/manage/manage.component';
 import { PlayerDialogComponent } from './app/components/manage/player-dialog/player-dialog.component';
@@ -135,7 +134,6 @@ firebase.initializeApp(environment.firebaseConfig);
     SidenavComponent,
     ProfileComponent,
     ResetPasswordComponent,
-    PostComponent,
     TeamsComponent,
     ProfileComponent,
     ManageComponent,

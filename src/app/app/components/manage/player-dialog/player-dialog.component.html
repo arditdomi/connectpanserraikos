@@ -36,6 +36,16 @@
   </mat-form-field>
 
   <mat-form-field>
+    <mat-label>Telephone number (include +country code)</mat-label>
+    <input matInput
+           [formControl]="telephoneNumberFormControl">
+    <mat-error *ngIf="telephoneNumberFormControl.hasError('required')">
+      <mat-icon> warning</mat-icon>
+      Telephone number is required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
     <mat-label>Choose date of birth</mat-label>
     <input matInput [matDatepicker]="picker"
            [formControl]="dateFormControl"
