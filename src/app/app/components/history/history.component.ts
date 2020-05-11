@@ -8,21 +8,24 @@ import { WhatsAppService } from '../../services/whatsApp.service';
   styleUrls: ['history.component.scss']
 })
 
-export class HistoryComponent implements OnInit {
+export class HistoryComponent {
 
   emailHistory;
   whatsAppHistory;
+
+  fromEmail;
+  toEmail;
+
+  fromWhatsApp;
+  toWhatsApp;
 
   constructor(private appService: AppService,
               private whatsAppService: WhatsAppService) {
   }
 
-  ngOnInit(): void {
-    this.appService.getEmailHistory().then(history => {
-      this.emailHistory = history;
-    });
-
-    this.whatsAppService.getHistory().then((history: any[]) => {
+  searchWhatsAppHistory() {
+    this.whatsAppHistory = [];
+    this.whatsAppService.getHistory(this.fromWhatsApp, this.toWhatsApp).then((history: any[]) => {
       history.forEach(entry => {
         let recipients = '';
         entry.successfulRecipients.forEach(recipient => {
@@ -32,5 +35,28 @@ export class HistoryComponent implements OnInit {
       });
       this.whatsAppHistory = history;
     });
+  }
+
+  searchEmailHistory() {
+    this.emailHistory = [];
+    this.appService.getEmailHistory(this.fromEmail, this.toEmail).then(history => {
+      this.emailHistory = history;
+    });
+  }
+
+  fromEmailSelect(date) {
+    this.fromEmail = date.value;
+  }
+
+  toEmailSelect(date) {
+    this.toEmail = date.value;
+  }
+
+  fromWhatsAppSelect(date) {
+    this.fromWhatsApp = date.value;
+  }
+
+  toWhatsAppSelect(date) {
+    this.toWhatsApp = date.value;
   }
 }

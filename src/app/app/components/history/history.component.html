@@ -1,24 +1,58 @@
 <mat-tab-group>
   <mat-tab label="Email History">
+    <mat-form-field>
+      <mat-label>From</mat-label>
+      <input matInput [matDatepicker]="fromPicker" (dateInput)="fromEmailSelect($event)">
+      <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+      <mat-datepicker #fromPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="to-date">
+      <mat-label>To</mat-label>
+      <input matInput [matDatepicker]="toPicker" (dateInput)="toEmailSelect($event)">
+      <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+      <mat-datepicker #toPicker></mat-datepicker>
+    </mat-form-field>
+
+    <button mat-button (click)="searchEmailHistory()"> Search </button>
+
     <mat-card *ngFor="let email of emailHistory">
+      <mat-card-header>
+        <b> On: {{email.on | date:'medium'}} </b>
+      </mat-card-header>
       <mat-card-content>
         Message: {{email.message}}
         <br>
         Recipients: {{email.recipients}}
-        <br>
-        Date and time of execution: {{email.on | date:'medium'}}
       </mat-card-content>
     </mat-card>
   </mat-tab>
 
   <mat-tab  label="WhatsApp History">
+      <mat-form-field>
+        <mat-label>From</mat-label>
+        <input matInput [matDatepicker]="fromWhatsAppPicker" (dateInput)="fromWhatsAppSelect($event)">
+        <mat-datepicker-toggle matSuffix [for]="fromWhatsAppPicker"></mat-datepicker-toggle>
+        <mat-datepicker #fromWhatsAppPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="to-date">
+        <mat-label>To</mat-label>
+        <input matInput [matDatepicker]="toWhatsAppPicker" (dateInput)="toWhatsAppSelect($event)">
+        <mat-datepicker-toggle matSuffix [for]="toWhatsAppPicker"></mat-datepicker-toggle>
+        <mat-datepicker #toWhatsAppPicker></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-button (click)="searchWhatsAppHistory()"> Search </button>
+
     <mat-card *ngFor="let message of whatsAppHistory">
+      <mat-card-header>
+        <b> On: {{message.on | date:'medium'}} </b>
+      </mat-card-header>
       <mat-card-content>
         Message: {{message.message}}
         <br>
         Recipients: {{message.successfulRecipients}}
-        <br>
-        Date and time of execution: {{message.on | date:'medium'}}
       </mat-card-content>
     </mat-card>
   </mat-tab>
