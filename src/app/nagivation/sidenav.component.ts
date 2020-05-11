@@ -35,4 +35,8 @@ export class SidenavComponent {
     this.router.navigate(['/manage']);
   }
 
+  navigateToHistory() {
+    this.router.navigate(['/history']);
+  }
+
 }

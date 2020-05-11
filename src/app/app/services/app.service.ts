@@ -5,7 +5,6 @@ import * as moment from 'moment';
 import { firestore } from 'firebase';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Player } from '../models/player';
-import * as firebase from 'firebase';
 import { serverEndpointUrl } from '../../../environments/environment';
 
 @Injectable({
@@ -16,6 +15,7 @@ export class AppService {
   teamsReference;
   playersReference;
   usersReference;
+  emailsReference;
 
   constructor(private angularFirestore: AngularFirestore,
               private logService: LogService,
@@ -23,6 +23,7 @@ export class AppService {
     this.teamsReference = this.angularFirestore.collection('teams').ref;
     this.usersReference = this.angularFirestore.collection('users').ref;
     this.playersReference = this.angularFirestore.collection('players').ref;
+    this.emailsReference = this.angularFirestore.collection('emailHistory').ref;
   }
 
   async getTeams() {
@@ -50,6 +51,20 @@ export class AppService {
         this.logService.handleError(error);
       });
     return players;
+  }
+
+  async getEmailHistory(): Promise<any> {
+    let history = [];
+    await this.emailsReference.get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          history.push(doc.data());
+        });
+      })
+      .catch(error => {
+        this.logService.handleError('error fetching emails history');
+      });
+    return history;
   }
 
   async getPlayersInTeam(teamName: string): Promise<Player[]> {
@@ -199,10 +214,22 @@ export class AppService {
 
     this.http.post(serverEndpointUrl + '/new-mail', payload, httpOptions).subscribe(result => {
       this.logService.showMessage(result);
+      this.addToHistory(payload);
     }, error => {
       this.logService.handleError(error.error.message);
     });
   }
+
+  addToHistory(payload) {
+    const historyEntry = {
+      message: payload.message,
+      recipients: payload.recipients,
+      on: moment.now()
+    };
+    this.emailsReference.doc().set(historyEntry).then().catch(error => {
+      this.logService.handleError('Error adding email to history: ' + error);
+    });
+  };
 
   private getPlayerObject(playerData) {
     return {

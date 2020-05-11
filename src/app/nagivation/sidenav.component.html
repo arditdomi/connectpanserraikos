@@ -33,6 +33,13 @@
           Manage Teams/Players
         </mat-list-item>
 
+        <mat-list-item (click)="navigateToHistory()" routerLinkActive="active">
+          <button mat-icon-button>
+            <mat-icon>history</mat-icon>
+          </button>
+          History
+        </mat-list-item>
+
         <mat-list-item (click)="logout()" routerLinkActive="active">
           <button mat-icon-button>
             <mat-icon>exit_to_app</mat-icon>

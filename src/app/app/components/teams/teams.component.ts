@@ -131,7 +131,11 @@ export class TeamsComponent implements OnInit {
     if (this.isStandardMode()) {
       recipients = this.players;
     } else {
-      recipients = this.selection.selected;
+      if (this.selection.selected.length > 0) {
+        recipients = this.selection.selected;
+      } else {
+        this.logService.handleError('You must select at least one player');
+      }
     }
 
     if (this.emailEnabled || this.whatsAppEnabled) {

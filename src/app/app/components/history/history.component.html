@@ -1,0 +1,25 @@
+<mat-tab-group>
+  <mat-tab label="Email History">
+    <mat-card *ngFor="let email of emailHistory">
+      <mat-card-content>
+        Message: {{email.message}}
+        <br>
+        Recipients: {{email.recipients}}
+        <br>
+        Date and time of execution: {{email.on | date:'medium'}}
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+
+  <mat-tab  label="WhatsApp History">
+    <mat-card *ngFor="let message of whatsAppHistory">
+      <mat-card-content>
+        Message: {{message.message}}
+        <br>
+        Recipients: {{message.successfulRecipients}}
+        <br>
+        Date and time of execution: {{message.on | date:'medium'}}
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

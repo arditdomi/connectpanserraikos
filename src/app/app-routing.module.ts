@@ -7,6 +7,7 @@ import { ResetPasswordComponent } from './auth/login/reset-password.component';
 import { TeamsComponent } from './app/components/teams/teams.component';
 import { ManageComponent } from './app/components/manage/manage.component';
 import { AuthGuard } from './auth/guards/auth.guard';
+import { HistoryComponent } from './app/components/history/history.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
         { path: 'profile', component: ProfileComponent },
         { path: 'teams', component: TeamsComponent },
         { path: 'manage', component: ManageComponent },
+        { path: 'history', component: HistoryComponent },
     ] }
 ];
 
