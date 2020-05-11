@@ -53,9 +53,14 @@ export class AppService {
     return players;
   }
 
-  async getEmailHistory(): Promise<any> {
+  async getEmailHistory(from: string, to: string): Promise<any> {
     let history = [];
-    await this.emailsReference.get()
+    const fromDate = moment(from).startOf('day').valueOf();
+    const toDate = moment(to).endOf('day').valueOf();
+    await this.emailsReference
+      .where('on', '>', fromDate)
+      .where('on', '<', toDate)
+      .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           history.push(doc.data());

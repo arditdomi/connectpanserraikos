@@ -61,9 +61,14 @@ export class WhatsAppService {
     return recipients;
   }
 
-  async getHistory(): Promise<any> {
+  async getHistory(from: string, to: string): Promise<any> {
+    const fromDate = moment(from).startOf('day').valueOf();
+    const toDate = moment(to).endOf('day').valueOf();
     let history = [];
-    await this.historyRef.get()
+    await this.historyRef
+      .where('on', '>', fromDate)
+      .where('on', '<', toDate)
+      .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           history.push(doc.data());
