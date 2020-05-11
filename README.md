@@ -1,4 +1,3 @@
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=arditdomi_connectpanserraikos&metric=alert_status)](https://sonarcloud.io/dashboard?id=arditdomi_connectpanserraikos)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=arditdomi_connectpanserraikos&metric=security_rating)](https://sonarcloud.io/dashboard?id=arditdomi_connectpanserraikos)
 # ConnectPanserraikos
 
