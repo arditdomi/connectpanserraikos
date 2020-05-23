@@ -40,6 +40,13 @@
           History
         </mat-list-item>
 
+        <mat-list-item *ngIf="isAdmin" (click)="navigateToAdmin()" routerLinkActive="active">
+          <button mat-icon-button>
+            <mat-icon>settings</mat-icon>
+          </button>
+          Admin
+        </mat-list-item>
+
         <mat-list-item (click)="logout()" routerLinkActive="active">
           <button mat-icon-button>
             <mat-icon>exit_to_app</mat-icon>

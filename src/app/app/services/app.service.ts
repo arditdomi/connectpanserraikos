@@ -53,6 +53,62 @@ export class AppService {
     return players;
   }
 
+  async getUsers(): Promise<any> {
+    let users: any[] = [];
+    await this.usersReference.get()
+      .then(response => {
+        response.forEach(user => {
+          users.push(user.data());
+        });
+      })
+      .catch(error => {
+        this.logService.handleError(error);
+      });
+    return users;
+  }
+
+  async getUser(uid): Promise<any> {
+    let user = undefined;
+
+    await this.usersReference
+      .where('uid', '==', uid)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(data => {
+          user = data.data();
+        });
+      });
+    return user;
+  }
+
+  async enableUser(user) {
+    const updatedUser = {
+      ...user,
+      enabled: true
+    };
+    await this.usersReference.doc(user.uid).update(updatedUser)
+      .then( () => {
+        this.logService.showMessage('The user was successfully enabled');
+      })
+      .catch(error => {
+        this.logService.handleError(error);
+      });
+  }
+
+  async disableUser(user) {
+    const updatedUser = {
+      ...user,
+      enabled: false
+    };
+    await this.usersReference.doc(user.uid).update(updatedUser)
+      .then( () => {
+        this.logService.showMessage('The user was successfully disabled');
+      })
+      .catch(error => {
+        this.logService.handleError(error);
+      });
+  }
+
   async getEmailHistory(from: string, to: string): Promise<any> {
     let history = [];
     const fromDate = moment(from).startOf('day').valueOf();
@@ -67,7 +123,7 @@ export class AppService {
         });
       })
       .catch(error => {
-        this.logService.handleError('error fetching emails history');
+        this.logService.handleError('Error fetching emails history');
       });
     return history;
   }

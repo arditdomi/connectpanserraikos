@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UserModel } from '../../../auth/model/user.model';
 import { AuthService } from '../../../auth/services/auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { LogService } from '../../services/log.service';
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +17,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private authService: AuthService,
+              private logService: LogService,
               private angularFireAuth: AngularFireAuth) {}
 
   ngOnInit() {

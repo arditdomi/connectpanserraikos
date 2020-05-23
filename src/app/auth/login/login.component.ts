@@ -27,8 +27,8 @@ export class LoginComponent {
       queryParams: { 'photoURL': user.photoURL, 'displayName': user.displayName, 'email': user.email },
       fragment: 'anchor'
     };
-    this.router.navigate(['/profile'], navigationExtras);
-    this.logService.showMessage('You are now logged in');
+      this.router.navigate(['/profile'], navigationExtras);
+      this.logService.showMessage('You are now logged in');
   }
 
   async onForgotPasswordSubmit($event) {

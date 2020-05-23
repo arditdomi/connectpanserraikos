@@ -11,6 +11,7 @@ import { AuthService } from '../auth/services/auth.service';
 export class SidenavComponent {
 
   mobileQuery: MediaQueryList;
+  isAdmin = false;
 
   private _mobileQueryListener: () => void;
 
@@ -21,6 +22,7 @@ export class SidenavComponent {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+    this.isAdmin = this.authService.isAdmin;
   }
 
   logout() {
@@ -37,6 +39,10 @@ export class SidenavComponent {
 
   navigateToHistory() {
     this.router.navigate(['/history']);
+  }
+
+  navigateToAdmin() {
+    this.router.navigate(['/admin']);
   }
 
 }
