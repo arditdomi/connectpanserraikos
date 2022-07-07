@@ -30,7 +30,7 @@
     "firebase-tools": "^7.15.1",
     "hammerjs": "^2.0.8",
     "material-design-icons": "^3.0.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "ngx-auth-firebaseui": "^4.0.2",
     "nodemailer": "^6.4.5",
     "rxjs": "~6.4.0",
